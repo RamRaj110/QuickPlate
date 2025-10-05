@@ -1,16 +1,34 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import CartItem from "./CartItems";
 import { clearCart } from "./utils/cartSlice";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Cart = () => {
   const cartItems = useSelector((store) => store.cart.items);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
 
   const handleClearCart = () => {
     dispatch(clearCart());
   };
+
+  const handleCheckout = () => {
+    setIsCheckingOut(true);
+    // Simulate a 2-second checkout process
+    setTimeout(() => {
+      alert("Order placed successfully!");
+      dispatch(clearCart());
+      setIsCheckingOut(false);
+      navigate("/"); // Redirect to the homepage after order
+    }, 2000);
+  };
+
+  const totalAmount = cartItems.reduce((total, item) => {
+    const price = item.card.info.price || item.card.info.defaultPrice;
+    return total + price / 100;
+  }, 0);
 
   if (cartItems.length === 0) {
     return (
@@ -42,11 +60,22 @@ const Cart = () => {
           <CartItem key={item.card.info.id + index} item={item} />
         ))}
       </div>
-       <div className="mt-8 pt-4 border-t text-right">
-            <button className="bg-green-500 text-white font-bold py-3 px-8 rounded-lg shadow-lg hover:bg-green-600 transition-all text-lg">
-                Proceed to Checkout
-            </button>
+      {/* Checkout Section */}
+      <div className="mt-8 pt-6 border-t-2 border-gray-200">
+        <div className="flex justify-end items-center">
+          <div className="text-right">
+            <p className="text-lg text-gray-600">Total Amount:</p>
+            <p className="text-2xl font-bold text-gray-900">₹{totalAmount.toFixed(2)}</p>
+          </div>
+          <button
+            onClick={handleCheckout}
+            disabled={isCheckingOut}
+            className="ml-8 bg-green-500 text-white font-bold py-3 px-8 rounded-lg shadow-lg hover:bg-green-600 transition-all text-lg disabled:bg-gray-400 disabled:cursor-not-allowed"
+          >
+            {isCheckingOut ? "Processing..." : "Proceed to Checkout"}
+          </button>
         </div>
+      </div>
     </div>
   );
 };

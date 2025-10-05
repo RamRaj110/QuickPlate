@@ -1,5 +1,5 @@
 import React from 'react';
-import { LOGO_URL } from "./utils/libs";
+
 import { NavLink, Link } from "react-router-dom";
 import useOnlineStatus from "./utils/useOnlineStatus";
 import { useSelector } from "react-redux";
@@ -18,7 +18,7 @@ const Header = () => {
         <header className="bg-white shadow-lg sticky top-0 z-50">
             <div className="container mx-auto flex justify-between items-center py-3 px-4">
                 <Link to="/" className="flex items-center gap-2">
-                    <img className="w-12 h-12 rounded-full" src={LOGO_URL} alt="Logo_Picture" />
+                    <img className="w-12 h-12 rounded-full" src="/logo.png" alt="Logo_Picture" />
                     <span className="text-xl font-bold text-gray-800 hidden sm:block">QuickPlate</span>
                 </Link>
                 <nav>
